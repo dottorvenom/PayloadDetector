@@ -12,7 +12,6 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-
 if( isset($_REQUEST["payload"]) && isset($_REQUEST["idlog"])) {
 	
 	$payload = $_REQUEST["payload"];  
