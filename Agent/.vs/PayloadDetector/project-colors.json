@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "15d85af1-d52b-4357-a1a2-e5a832e42709": {
+      "ProjectGuid": "15d85af1-d52b-4357-a1a2-e5a832e42709",
+      "DisplayName": "PayloadDetector",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
