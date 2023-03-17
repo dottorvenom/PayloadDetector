@@ -11,6 +11,7 @@ The data is sent to a command and control to be then analyzed.
 There is a keylogging routine to be enabled as needed.
 
 The agent functions are configurable through a configuration file.
+#### The configuration file must be placed in the executable folder
 
 The agent code is VB.NET while the command and control is PHP with mysql database
 

