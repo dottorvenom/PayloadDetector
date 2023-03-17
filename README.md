@@ -3,8 +3,8 @@
 First draft (v. 0.1) of the tool designed for blueteams to facilitate the detection 
 of payloads loaded into endpoints by the attacker.
 
-It consists of an agent that will run as a service with system account privileges
-the agent creates a logsource where it records and stores the payloads captured on file creation, modification and deletion.
+It consists of an agent that will run as a service with system account privileges.
+The agent creates a logsource where it records and stores the payloads captured on file creation, modification and deletion.
 
 The data is sent to a command and control to be then analyzed.
 
