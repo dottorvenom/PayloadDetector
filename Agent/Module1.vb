@@ -22,7 +22,7 @@ Module Module1
 
     Sub carica_configurazione()
 
-        If File.Exists("config.txt") Then
+        If File.Exists(verifica_path(Directory.GetCurrentDirectory) & "config.txt") Then
 
 
             Dim f As New StreamReader(verifica_path(Directory.GetCurrentDirectory) & "config.txt")
@@ -91,8 +91,11 @@ Module Module1
             c.path_monitor = "c:\"
             arrayEst(0) = ".ps1"
 
-            c.path_escl_monitoring = "c:\windows\"
+            c.ext_monitoring = ""
+            c.path_escl_monitoring = "c:\windows\"    '<-------test
             c.temp_path = "c:\temp\"
+
+
             c.switch_monitor_path = False
             c.path_recursive = True
             c.switch_del_error = False
