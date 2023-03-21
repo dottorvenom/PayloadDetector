@@ -14,6 +14,17 @@ include 'db.php';
 </head>
 
 <body>
+
+<script>
+		function myconf() {  
+			var result;  
+			var r = confirm("Delete?");  
+			if (r == true) {  
+				location.href="index.php?do=D";  
+			}   
+		}  
+</script>
+
 <table id="main" width="100%" cellpadding="1" cellspacing="1">
 <tr>
 	<td colspan="7" align="center"><h3>C2</h3></td>
@@ -74,7 +85,7 @@ if ($result->num_rows > 0) {
 	<td colspan="7">ID Log 169 -> Create | 269 -> Rename | 369 -> Modify</td>
 </tr>
 <tr>
-	<td colspan="7">Record number: <?php echo $result->num_rows; ?>&nbsp;|&nbsp;<a href="index.php">Update</a>&nbsp;|&nbsp;<a href="index.php?do=D">Delete All</a>&nbsp;|&nbsp;<a href="key.php">Keylogger</a></td>
+	<td colspan="7">Record number: <?php echo $result->num_rows; ?>&nbsp;|&nbsp;<a href="index.php">Update</a>&nbsp;|&nbsp;<a href="javascript:myconf();">Delete All</a>&nbsp;|&nbsp;<a href="key.php">Keylogger</a></td>
 </tr>
 
 

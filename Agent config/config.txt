@@ -12,9 +12,9 @@ c:\temp\
 1
 #delete error.log on closing 0 no - 1 yes
 0
-#url c2 - enter # if not available
-http://localhost/c2/collect.php
+#url c2 - enter # if not available - ends with /
+http://localhost/c2/
 #enable keylogger 0 no - 1 yes
 1
 #log source name
-C2Control
+Horizon2023

