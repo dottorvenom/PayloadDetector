@@ -1,3 +1,10 @@
+<?php
+
+include 'conf.php';
+include 'db.php';
+
+?>
+
 
 <?php
 
@@ -8,27 +15,16 @@ function parsingBase64($m) {
 }
 
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-
-$conn = new mysqli($servername, $username, $password);
-if ($conn->connect_error) {
-	die;
-  
-}
-
-$id = $_REQUEST["id"]; 
+$id = $_REQUEST["id"];
 $sql = "SELECT * FROM c2.log_monitor where id = '" . $id . "'";
 
 $result = $conn->query($sql);
 
-
 if ($result->num_rows > 0) {
 	
 	$row = $result->fetch_assoc();
-    $b = parsingBase64($row["event_full"]);
-	
+    //$b = parsingBase64($row["b64"]);
+	$b = $row["b64"];
     $data = base64_decode($b);
 
     header("Cache-Control: no-cache private");

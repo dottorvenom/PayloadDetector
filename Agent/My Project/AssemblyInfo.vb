@@ -9,8 +9,8 @@ Imports System.Runtime.InteropServices
 ' Controllare i valori degli attributi degli assembly
 
 <Assembly: AssemblyTitle("PayloadDetector")>
-<Assembly: AssemblyDescription("For BlueTeams")>
-<Assembly: AssemblyCompany("Dino Barlattani")>
+<Assembly: AssemblyDescription("Dino Barlattani")>
+<Assembly: AssemblyCompany("")>
 <Assembly: AssemblyProduct("PayloadDetector")>
 <Assembly: AssemblyCopyright("Dino Barlattani - Copyright ©  2023")>
 <Assembly: AssemblyTrademark("")>

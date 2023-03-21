@@ -1,5 +1,6 @@
 ﻿
 
+
 Public Class Class1
 
 End Class
@@ -12,6 +13,7 @@ Public Class Configurazione
     Private s4 As String
     Private s5 As String
     Private s6 As String
+    Private s7 As String
 
     Private b1 As Boolean
     Private b2 As Boolean
@@ -64,7 +66,14 @@ Public Class Configurazione
             s6 = value
         End Set
     End Property
-
+    Public Property log_name As String
+        Get
+            Return s7
+        End Get
+        Set(value As String)
+            s7 = value
+        End Set
+    End Property
 
 
     Public Property switch_monitor_path As Boolean

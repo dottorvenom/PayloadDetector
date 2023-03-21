@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Mar 17, 2023 alle 16:51
+-- Creato il: Mar 21, 2023 alle 11:24
 -- Versione del server: 10.4.27-MariaDB
 -- Versione PHP: 8.2.0
 
@@ -31,8 +31,10 @@ CREATE TABLE `log_monitor` (
   `id` int(11) NOT NULL,
   `ip_address_source` varchar(200) NOT NULL,
   `id_log` varchar(5) NOT NULL,
-  `event_full` longtext NOT NULL,
-  `timestamp` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `b64` longtext NOT NULL,
+  `timestamp` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `hash` varchar(200) NOT NULL,
+  `file_name` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
