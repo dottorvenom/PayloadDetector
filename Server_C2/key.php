@@ -10,25 +10,35 @@ include 'db.php';
 
 <head>
 <title>.:: <?php echo $title; ?> ::.</title>
-<link rel="stylesheet" href="main.css">
+<!-- <link rel="stylesheet" href="main.css"> -->
+
+<link rel="stylesheet" href="./css/bootstrap.min.css">
+<script src="jquery.js"></script>
+<script src="./js/bootstrap.min.js"></script>
+
 </head>
 
 <body>
-<table id="main" width="100%" cellpadding="1" cellspacing="1">
+
+<table  class="table table-bordered table-hover">
+<thead>
 <tr>
 	<td colspan="4" align="center"><h3>C2</h3></td>
 </tr>
 
 <tr>
-	<td align="center">Indirizzo IP</td>
-	<td align="center">Hostname</td>
-	<td align="center">Timestamp</td>
-    <td align="center">Keylogger</td>
+	<th align="center">Indirizzo IP</td>
+	<th align="center">Hostname</td>
+	<th align="center">Timestamp</td>
+    <th align="center">Keylogger</td>
 
 </tr>
+</thead>
+<tbody>
 <tr>
 	<td colspan="4">&nbsp;</td> 
 </tr>
+
 
 <?php
 
@@ -66,7 +76,7 @@ if ($result->num_rows > 0) {
 </tr>
 
 
-
+</tbody>
 </table>
 </body>
 </html>

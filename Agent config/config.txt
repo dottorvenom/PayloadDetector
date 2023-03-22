@@ -1,7 +1,7 @@
 #monitoring path - end with \
 c:\
 #extensions to be monitored - sequentially divided by ; begins with .
-.ps1;.exe;.bat;.vbs
+.ps1;.exe;.bat;.vbs;.dll;.cmd;.com;.psm1;.py;.hta;.psd1
 #path to exclude from monitoring - ends with \
 c:\windows\
 #temp path for service - ends with \ - don't use same fold as program

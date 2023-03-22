@@ -10,7 +10,12 @@ include 'db.php';
 
 <head>
 <title>.:: <?php echo $title; ?> ::.</title>
-<link rel="stylesheet" href="main.css">
+<!-- <link rel="stylesheet" href="main.css"> -->
+
+<link rel="stylesheet" href="./css/bootstrap.min.css">
+<script src="jquery.js"></script>
+<script src="./js/bootstrap.min.js"></script>
+
 </head>
 
 <body>
@@ -25,19 +30,22 @@ include 'db.php';
 		}  
 </script>
 
-<table id="main" width="100%" cellpadding="1" cellspacing="1">
+<table class="table table-bordered table-hover">
+<thead>
 <tr>
 	<td colspan="7" align="center"><h3>C2</h3></td>
 </tr>
 
 <tr>
-	<td align="center">Indirizzo IP</td>
-	<td align="center">Timestamp</td>
-    <td align="center">ID Log</td>
-	<td align="center">Nome file</td>
-	<td align="center">Hash</td>
-	<td>&nbsp;</td>
+	<th scope="col">Indirizzo IP</td>
+	<th scope="col">Timestamp</td>
+    <th scope="col">ID Log</td>
+	<th scope="col">Nome file</td>
+	<th scope="col">Hash</td>
+	<th scope="col">&nbsp;</td>
 </tr>
+</thead>
+<tbody>
 <tr>
 	<td colspan="7">&nbsp;</td> 
 </tr>
@@ -89,7 +97,8 @@ if ($result->num_rows > 0) {
 </tr>
 
 
-
+</tbody>
 </table>
+
 </body>
 </html>
