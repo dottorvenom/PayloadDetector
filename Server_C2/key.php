@@ -9,17 +9,20 @@ include 'db.php';
 <html>
 
 <head>
-<title>.:: <?php echo $title; ?> ::.</title>
-<!-- <link rel="stylesheet" href="main.css"> -->
+<meta http-equiv="refresh" content="60">
 
-<link rel="stylesheet" href="./css/bootstrap.min.css">
-<script src="jquery.js"></script>
-<script src="./js/bootstrap.min.js"></script>
+
+<?php
+include 'header.php';
+?>
+
+
 
 </head>
 
 <body>
-
+<br>
+<div class="container-fluid">
 <table  class="table table-bordered table-hover">
 <thead>
 <tr>
@@ -57,7 +60,7 @@ if ($result->num_rows > 0) {
   	$b = $row["b64"];
     $data = base64_decode($b);
 	
-	echo "<tr><td>" . $row["ip_address"] . "</td><td>" . $row["hostname"] . "</td><td>". $row["timestamp"] . "</td><td>" . $data . "</td></tr>";
+	echo "<tr><td>" . $row["ip_address"] . "</td><td>" . $row["hostname"] . "</td><td>". $row["timestamp"] . "</td><td><textarea rows='6' cols='300' id='data'>" . $data . "</textarea></div></td></tr>";
   
   
   
@@ -78,5 +81,6 @@ if ($result->num_rows > 0) {
 
 </tbody>
 </table>
+</div>
 </body>
 </html>

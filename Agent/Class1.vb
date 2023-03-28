@@ -14,6 +14,7 @@ Public Class Configurazione
     Private s5 As String
     Private s6 As String
     Private s7 As String
+    Private s8 As Integer
 
     Private b1 As Boolean
     Private b2 As Boolean
@@ -75,6 +76,14 @@ Public Class Configurazione
         End Set
     End Property
 
+    Public Property timer_interval As Integer
+        Get
+            Return s8
+        End Get
+        Set(value As Integer)
+            s8 = value
+        End Set
+    End Property
 
     Public Property switch_monitor_path As Boolean
         Get
@@ -100,4 +109,6 @@ Public Class Configurazione
             b3 = value
         End Set
     End Property
+
+
 End Class

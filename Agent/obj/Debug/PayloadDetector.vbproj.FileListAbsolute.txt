@@ -1,11 +1,11 @@
-C:\Users\Dino\Documents\GitHub\PayloadDetector\Agent\bin\Debug\PayloadDetector.exe.config
-C:\Users\Dino\Documents\GitHub\PayloadDetector\Agent\bin\Debug\PayloadDetector.exe
-C:\Users\Dino\Documents\GitHub\PayloadDetector\Agent\bin\Debug\PayloadDetector.pdb
-C:\Users\Dino\Documents\GitHub\PayloadDetector\Agent\bin\Debug\PayloadDetector.xml
-C:\Users\Dino\Documents\GitHub\PayloadDetector\Agent\obj\Debug\PayloadDetector.vbproj.SuggestedBindingRedirects.cache
-C:\Users\Dino\Documents\GitHub\PayloadDetector\Agent\obj\Debug\PayloadDetector.Resources.resources
-C:\Users\Dino\Documents\GitHub\PayloadDetector\Agent\obj\Debug\PayloadDetector.vbproj.GenerateResource.cache
-C:\Users\Dino\Documents\GitHub\PayloadDetector\Agent\obj\Debug\PayloadDetector.vbproj.CoreCompileInputs.cache
-C:\Users\Dino\Documents\GitHub\PayloadDetector\Agent\obj\Debug\PayloadDetector.exe
-C:\Users\Dino\Documents\GitHub\PayloadDetector\Agent\obj\Debug\PayloadDetector.xml
-C:\Users\Dino\Documents\GitHub\PayloadDetector\Agent\obj\Debug\PayloadDetector.pdb
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\obj\Debug\PayloadDetector.vbproj.SuggestedBindingRedirects.cache
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\obj\Debug\PayloadDetector.Resources.resources
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\obj\Debug\PayloadDetector.vbproj.GenerateResource.cache
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\obj\Debug\PayloadDetector.vbproj.CoreCompileInputs.cache
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\bin\Debug\PayloadDetector.exe.config
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\bin\Debug\PayloadDetector.exe
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\bin\Debug\PayloadDetector.pdb
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\bin\Debug\PayloadDetector.xml
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\obj\Debug\PayloadDetector.exe
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\obj\Debug\PayloadDetector.xml
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\obj\Debug\PayloadDetector.pdb

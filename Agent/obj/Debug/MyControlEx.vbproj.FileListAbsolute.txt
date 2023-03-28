@@ -1,0 +1,12 @@
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\bin\Debug\MyControlEx.exe.config
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\bin\Debug\MyControlEx.exe
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\bin\Debug\MyControlEx.pdb
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\bin\Debug\MyControlEx.xml
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\obj\Debug\MyControlEx.vbproj.SuggestedBindingRedirects.cache
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\obj\Debug\MyControlEx.Resources.resources
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\obj\Debug\MyControlEx.vbproj.GenerateResource.cache
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\obj\Debug\MyControlEx.vbproj.CoreCompileInputs.cache
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\obj\Debug\MyControlEx.exe
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\obj\Debug\MyControlEx.xml
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\obj\Debug\MyControlEx.pdb
+C:\Users\Dino\Desktop\COR ROC RSA\CyberGym\Monitoring_Exercise\MyControlEx\obj\Debug\MyControlEx.vbproj.AssemblyReference.cache

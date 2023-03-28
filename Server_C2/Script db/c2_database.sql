@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Mar 21, 2023 alle 14:45
+-- Creato il: Mar 28, 2023 alle 13:06
 -- Versione del server: 10.4.27-MariaDB
 -- Versione PHP: 8.2.0
 
@@ -51,6 +51,44 @@ CREATE TABLE `log_monitor` (
   `file_name` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `tbl_ips`
+--
+
+CREATE TABLE `tbl_ips` (
+  `id` int(11) NOT NULL,
+  `ip_address` varchar(200) NOT NULL,
+  `hostname` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `tbl_ips_process`
+--
+
+CREATE TABLE `tbl_ips_process` (
+  `id` int(11) NOT NULL,
+  `id_parent_ip` int(11) NOT NULL,
+  `process_name` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `tbl_ips_process_dll`
+--
+
+CREATE TABLE `tbl_ips_process_dll` (
+  `id` int(11) NOT NULL,
+  `id_parent_proc` int(11) NOT NULL,
+  `id_parent_ip` int(11) NOT NULL,
+  `dll_path` varchar(200) NOT NULL,
+  `hash` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Indici per le tabelle scaricate
 --
@@ -68,6 +106,24 @@ ALTER TABLE `log_monitor`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indici per le tabelle `tbl_ips`
+--
+ALTER TABLE `tbl_ips`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indici per le tabelle `tbl_ips_process`
+--
+ALTER TABLE `tbl_ips_process`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indici per le tabelle `tbl_ips_process_dll`
+--
+ALTER TABLE `tbl_ips_process_dll`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT per le tabelle scaricate
 --
 
@@ -81,6 +137,24 @@ ALTER TABLE `log_keylog`
 -- AUTO_INCREMENT per la tabella `log_monitor`
 --
 ALTER TABLE `log_monitor`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `tbl_ips`
+--
+ALTER TABLE `tbl_ips`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `tbl_ips_process`
+--
+ALTER TABLE `tbl_ips_process`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `tbl_ips_process_dll`
+--
+ALTER TABLE `tbl_ips_process_dll`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 

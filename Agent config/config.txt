@@ -18,3 +18,5 @@ http://localhost/c2/
 1
 #log source name
 Horizon2023
+#interval to send dll (sec) - not < 5 min
+600
